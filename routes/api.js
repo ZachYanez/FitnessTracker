@@ -1,46 +1,36 @@
+const router = require("express").Router()
+const { request } = require("express")
+const Workout = require("../models/schema")
+
+router.get("/api/Workouts", (req,res)=> {
+        Workout.find()
+        .then(dbWorkouts =>{
+            res.json(dbWorkouts)
+        })
+        .catch(err =>{
+            res.json(err)
+        })
+})
 
 
-const API = {
-  async getLastWorkout() {
-    let res;
-    try {
-      res = await fetch("/api/workouts");
-    } catch (err) {
-      console.log(err)
-    }
-    const json = await res.json();
-
-    return json[json.length - 1];
-  },
-  async addExercise(data) {
-    const id = location.search.split("=")[1];
-
-    const res = await fetch("/api/workouts/" + id, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
+router.get("/api/Workouts/range", (req ,res)=> {
+    Workout.find().sort({day:-1 }).limit(7).then(data => {
+        res.json(data);
+    })
+    .catch(err =>{
+        res.json(err)
     });
+});
 
-    const json = await res.json();
-
-    return json;
-  },
-  async createWorkout(data = {}) {
-    const res = await fetch("/api/workouts", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" }
+router.get("/api/Workouts/:id", (req,res)=> {
+    Workout.create({}).then(data =>{
+        res.json(dbWorkouts)
+    })
+    .catch(err =>{
+        res.json(err);
     });
+});
 
-    const json = await res.json();
 
-    return json;
-  },
 
-  async getWorkoutsInRange() {
-    const res = await fetch(`/api/workouts/range`);
-    const json = await res.json();
-
-    return json;
-  },
-};
+module.exports = router
