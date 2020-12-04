@@ -1,5 +1,5 @@
 const router = require("express").Router()
-const Workout = require("../models/schema")
+const Workout = require("../models")
 
 router.get("/api/Workouts", (req,res)=> {
         Workout.find()
@@ -10,7 +10,6 @@ router.get("/api/Workouts", (req,res)=> {
             res.json(err)
         })
 })
-
 
 router.get("/api/Workouts/range", (req ,res)=> {
     Workout.find().sort({day:-1 }).limit(7).then(data => {
