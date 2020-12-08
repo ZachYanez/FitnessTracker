@@ -1,8 +1,9 @@
-const router = require("express").Router()
-const Workout = require("../models")
+const db = require("../models")
 
-router.get("/api/Workouts", (req,res)=> {
-        Workout.find()
+module.exports = (app) => {
+
+app.get("/api/workouts", (req,res)=> {
+        db.Workout.find({})
         .then(dbWorkouts =>{
             res.json(dbWorkouts)
         })
@@ -11,8 +12,8 @@ router.get("/api/Workouts", (req,res)=> {
         })
 })
 
-router.get("/api/Workouts/range", (req ,res)=> {
-    Workout.find().sort({day:-1 }).limit(7).then(data => {
+app.get("/api/workouts/range", (req ,res)=> {
+    db.Workout.find({}).sort({day:-1 }).limit(7).then(data => {
         res.json(data);
     })
     .catch(err =>{
@@ -20,9 +21,18 @@ router.get("/api/Workouts/range", (req ,res)=> {
     });
 });
 
-router.get("/api/Workouts/:id", (req,res)=> {
-    Workout.create({}).then(data =>{
-        res.json(dbWorkouts)
+app.post("/api/workouts/", (req,res)=> {
+    db.Workout.create({}).then(data => {
+        res.json(data)
+    })
+    .catch(err =>{
+        res.json(err);
+    });
+});
+
+app.post("/api/workouts/range", (req,res)=> {
+    db.Workout.create({}).then(data => {
+        res.json(data)
     })
     .catch(err =>{
         res.json(err);
@@ -30,5 +40,13 @@ router.get("/api/Workouts/:id", (req,res)=> {
 });
 
 
+app.put("/api/workouts/:id", (req,res)=> {
+    db.Workout.findByIdAndUpdate({_id: req.params.id}, {$push: {exercises: req.body}}).then(data => {
+        res.json(data)
+    })
+    .catch(err =>{
+        res.json(err);
+    });
+});
 
-module.exports = router
+};

@@ -1,3 +1,3 @@
 module.exports = {
-    Workout: require("./schema.js")
+    Workout: require("./Workout.js")
 }

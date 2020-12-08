@@ -13,7 +13,6 @@ mongoose.connect(
 );
 
 
-
 const workoutSeed = [
   {
     day: new Date().setDate(new Date().getDate()-10),
